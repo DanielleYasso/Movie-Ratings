@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import sessionmaker, relationship, backref
 
 ENGINE = None
 Session = None
@@ -30,10 +30,13 @@ class Rating(Base):
     __tablename__ = "ratings"
 
     id = Column(Integer, primary_key = True)
-    movie_id = Column(Integer, nullable = False)
-    user_id = Column(Integer, nullable = False)
+    movie_id = Column(Integer, ForeignKey('movies.id'), nullable = False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable = False)
     rating = Column(Integer, nullable = False)
 
+    # adds attribute user to Rating class. adds attribute ratings to User class
+    user = relationship("User", backref=backref("ratings", order_by=id))
+    movie = relationship("Movie", backref=backref("ratings", order_by=id))
 
 ### End class declarations
 
