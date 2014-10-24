@@ -32,7 +32,7 @@ def load_movies(session):
         movie_id, title, released, imdb = movie_data[0], movie_data[1], movie_data[2], movie_data[4]
         
         # creates a string that stores data as unicode, so we can use accent marks in titles
-        title = title.split("(")[0]
+        title = title.split("(")[0].strip()
         title = title.decode("latin-1")
 
         # convert date from string to datetime object
