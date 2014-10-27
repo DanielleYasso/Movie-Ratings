@@ -5,9 +5,9 @@
 <body>
     <h2>Would you like to login or signup?</h2>
 
-    {% if session.get("user", False) %}
+    {% if session.get("user_email", False) %}
         <div>
-            User: {{ session["user"] }} 
+            User: {{ session["user_email"] }} 
         </div>
         <a href="/logout">Logout</a>
     {% else %}
@@ -16,6 +16,7 @@
     {% endif %}
 
     <a href="/get_user_list">View All Users</a>
+    <a href="/get_movie_list">View All Movies</a>
 
 
 

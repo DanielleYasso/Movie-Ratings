@@ -1,10 +1,17 @@
 {% extends "index.html" %}
 {% block body %}
 
+
 <h3>Ratings for User #{{ user }}</h3>
 <ul>
     {% for rating in user_ratings %}
-        <li>{{ rating.movie.name }}: {{ rating.rating }}</li>
+        {% if session["user_id"]==user %}
+        <form action="/update_movie_rating?movie={{ rating.movie.id }}" method="POST">
+            <li>{{ rating.movie.name }}: {{ rating.rating }} <input name="rating" type="text" maxlength="1" size="4"><input type="submit" value="Update Rating"></li>
+        </form>
+        {% else %}
+            <li>{{ rating.movie.name }}: {{ rating.rating }}</li>
+        {% endif %}
     {% endfor %}
 </ul>
 

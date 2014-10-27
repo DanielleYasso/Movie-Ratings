@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block body %}
+
+    {% for movie in movies %}
+        {% if session.get("user_id", False) %}
+        <h2><a href="#">{{ movie.name }}</a> has {{ movie.ratings|length }} ratings</h2>
+        {% else %}
+        <h2>{{ movie.name }} has {{ movie.ratings|length }} ratings</h2>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

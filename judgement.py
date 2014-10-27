@@ -4,6 +4,8 @@ import model
 app = Flask(__name__)
 app.secret_key = "ABC"
 
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -41,7 +43,10 @@ def user_signup():
         u.zipcode = zipcode
         model.session.add(u)
         model.session.commit()
-        session["user"] = u.email
+        
+        session["user_email"] = u.email
+        session["user_id"] = str(u.id)
+        print session
         flash("Successfully signed up!")
 
     return redirect("/")
@@ -53,7 +58,8 @@ def user_login():
     u = model.session.query(model.User).filter_by(email = email).filter_by(password = password).first()
     if u:
         flash("Login successful")
-        session["user"] = u.email
+        session["user_email"] = u.email
+        session["user_id"] = str(u.id)
         print session
         return redirect("/")
     else:
@@ -62,14 +68,16 @@ def user_login():
 
 @app.route("/logout")
 def user_logout():
-    session["user"] = None
+    session["user_email"] = None
+    session["user_id"] = None
     flash("Logout successful")
     print session["user"]
     return redirect("/")
 
 @app.route("/get_user_list")
 def get_user_list():
-    user_list = model.session.query(model.User).limit(20).all()
+    # user_list = model.session.query(model.User).limit(20).all()
+    user_list = model.session.query(model.User).filter_by(id=944).all()
     return render_template("user_list.html", users=user_list)
 
 @app.route("/display_user_info")
@@ -80,6 +88,36 @@ def display_user_info():
     #     movie = rating.movie
     #     print movie.name, rating.rating
     return render_template("user_info.html", user_ratings = user_ratings, user = user)
+
+@app.route("/get_movie_list")
+def get_movie_list():
+    movie_list = model.session.query(model.Movie).limit(20).all()
+    return render_template("movie_list.html", movies=movie_list)
+
+@app.route("/update_movie_rating", methods=["POST"])
+def update_movie_rating():
+    # user_id in session
+    movie_id = request.args.get("movie")
+    rating = request.form.get("rating")
+    user_id = session["user_id"]
+    # print movie_id
+    # print rating
+    rating_record = model.session.query(model.Rating).filter_by(user_id = user_id).filter_by(movie_id = movie_id).first()
+    
+    if rating_record:
+        rating_record.rating = rating
+        flash("Your rating has been updated.")
+    else:
+        r = model.Rating()
+        r.user_id = user_id
+        r.movie_id = movie_id
+        r.rating = rating
+        model.session.add(r)
+        flash("Your rating has been added.")
+    model.session.commit()
+    url = "/display_user_info?user=%s" % user_id
+    return redirect(url)
+
 
 
 
