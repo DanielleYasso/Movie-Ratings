@@ -1,0 +1,34 @@
+<html>
+    <head></head>
+    <body>
+        <form action="/signup" method="POST">
+            <div>
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="text" id="password" name="password">
+            </div>
+            <div>
+                <label for="age">Age</label>
+                <input type="text" id="age" name="age">
+            </div>
+            <div>
+                <label for="zipcode">Zipcode</label>
+                <input type="text" id="zipcode" name="zipcode">
+            </div>
+            <div>
+                <input type="submit" value="Signup">
+            </div>
+        </form>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+    </body>
+</html>
