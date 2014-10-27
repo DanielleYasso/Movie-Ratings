@@ -41,6 +41,7 @@ def user_signup():
         u.zipcode = zipcode
         model.session.add(u)
         model.session.commit()
+        session["user"] = u.email
         flash("Successfully signed up!")
 
     return redirect("/")

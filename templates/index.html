@@ -6,12 +6,16 @@
     <h2>Would you like to login or signup?</h2>
 
     {% if session.get("user", False) %}
+        <div>
+            User: {{ session["user"] }} 
+        </div>
         <a href="/logout">Logout</a>
     {% else %}
         <a href="/login_form">Login</a>
+        <a href="/signup_form">Signup</a>
     {% endif %}
 
-    <a href="/signup_form">Signup</a>
+
 
 
     {% block body %}
