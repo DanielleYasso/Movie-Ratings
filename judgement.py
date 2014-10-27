@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash
+from flask import Flask, render_template, redirect, request, flash, session
 import model
 
 app = Flask(__name__)
@@ -31,7 +31,7 @@ def user_signup():
     # if exists, ask if they want to login
     if u:
         flash("User already exists! LOGIN DAMMIT")
-        return render_template("signup_form.html")
+        return redirect("/signup_form")
     # if doesn't exist, add user info to database as new user
     else:
         u = model.User()
@@ -44,6 +44,28 @@ def user_signup():
         flash("Successfully signed up!")
 
     return redirect("/")
+
+@app.route("/login", methods=["POST"])
+def user_login():
+    email = request.form.get("email")
+    password = request.form.get("password")
+    u = model.session.query(model.User).filter(model.User.email == email).filter(model.User.password == password).first()
+    if u:
+        flash("Login successful")
+        session["user"] = u.email
+        print session
+        return redirect("/")
+    else:
+        flash("Email/password not valid, please try again.")
+        return redirect("/login_form")
+
+@app.route("/logout")
+def user_logout():
+    session["user"] = None
+    flash("Logout successful")
+    print session["user"]
+    return redirect("/")
+
 
 
 

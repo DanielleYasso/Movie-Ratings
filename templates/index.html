@@ -4,7 +4,26 @@
 </head>
 <body>
     <h2>Would you like to login or signup?</h2>
-    <a href="/login_form">Login</a>
+
+    {% if session.get("user", False) %}
+        <a href="/logout">Logout</a>
+    {% else %}
+        <a href="/login_form">Login</a>
+    {% endif %}
+
     <a href="/signup_form">Signup</a>
+
+
+    {% block body %}
+    {% endblock %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
 </body>
 </html>
