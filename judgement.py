@@ -50,7 +50,7 @@ def user_signup():
 def user_login():
     email = request.form.get("email")
     password = request.form.get("password")
-    u = model.session.query(model.User).filter(model.User.email == email).filter(model.User.password == password).first()
+    u = model.session.query(model.User).filter_by(email = email).filter_by(password = password).first()
     if u:
         flash("Login successful")
         session["user"] = u.email
@@ -67,7 +67,19 @@ def user_logout():
     print session["user"]
     return redirect("/")
 
+@app.route("/get_user_list")
+def get_user_list():
+    user_list = model.session.query(model.User).limit(20).all()
+    return render_template("user_list.html", users=user_list)
 
+@app.route("/display_user_info")
+def display_user_info():
+    user = request.args.get("user")
+    user_ratings = model.session.query(model.Rating).filter_by(user_id = user).all()
+    # for rating in user_ratings:
+    #     movie = rating.movie
+    #     print movie.name, rating.rating
+    return render_template("user_info.html", user_ratings = user_ratings, user = user)
 
 
 

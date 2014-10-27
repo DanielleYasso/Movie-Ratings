@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+{% block body %}
+
+<h3>Ratings for User #{{ user }}</h3>
+<ul>
+    {% for rating in user_ratings %}
+        <li>{{ rating.movie.name }}: {{ rating.rating }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

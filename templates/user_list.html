@@ -1,12 +1,8 @@
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "index.html" %}
+{% block body %}
 
     {% for user in users %}
-    <h2>User {{ user.id }}, age {{ user.age }} has {{ user.ratings|length }} ratings</h2>
+    <h2><a href="/display_user_info?user={{ user.id }}">User {{ user.id }}</a>, age {{ user.age }} has {{ user.ratings|length }} ratings</h2>
     {% endfor %}
 
-</body>
-</html>
+{% endblock %}
