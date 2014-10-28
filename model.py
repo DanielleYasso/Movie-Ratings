@@ -40,18 +40,16 @@ class User(Base):
 
     def predict_rating(self, movie):
         other_ratings = movie.ratings
-        other_users = [ rating.user for rating in other_ratings ]
-        similarities = [ (self.similarity(other_user), other_user) for other_user in other_users ]
-        similarities.sort(reverse = True)
-        top_user = similarities[0]
-        matched_rating = None
-        for rating in other_ratings:
-            if rating.user_id == top_user[1].id:
-                matched_rating = rating
-                break
 
-        # return the predicted rating: top_user's rating times top_user's similarity to user
-        return matched_rating.rating * top_user[0]
+        similarities = [ (self.similarity(r.user), r) for r in other_ratings ]
+
+        similarities.sort(reverse = True)
+        
+        top_match = similarities[0]
+        similarity_num, rating_object = top_match
+
+        return rating_object.rating * similarity_num
+
 
 class Movie(Base):
     __tablename__ = "movies"
