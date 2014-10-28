@@ -71,13 +71,18 @@ def user_logout():
     session["user_email"] = None
     session["user_id"] = None
     flash("Logout successful")
-    print session["user"]
+    print session
     return redirect("/")
 
 @app.route("/get_user_list")
 def get_user_list():
-    # user_list = model.session.query(model.User).limit(20).all()
-    user_list = model.session.query(model.User).filter_by(id=944).all()
+    user_list = model.session.query(model.User).limit(10).all()
+    extra_user = model.session.query(model.User).filter_by(id=944).first()
+
+    user_list.append(extra_user)
+    extra_user = model.session.query(model.User).filter_by(id=945).first()
+    user_list.append(extra_user)
+
     return render_template("user_list.html", users=user_list)
 
 @app.route("/display_user_info")
@@ -92,6 +97,7 @@ def display_user_info():
 @app.route("/get_movie_list")
 def get_movie_list():
     movie_list = model.session.query(model.Movie).limit(20).all()
+   
     return render_template("movie_list.html", movies=movie_list)
 
 @app.route("/update_movie_rating", methods=["POST"])
