@@ -2,6 +2,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, backref, scoped_session
+import correlation
 
 
 ENGINE = create_engine("sqlite:///ratings.db", echo=False)
@@ -20,6 +21,22 @@ class User(Base):
     password = Column(String(64), nullable=True)
     age = Column(Integer, nullable=True)
     zipcode = Column(String(15), nullable=True)
+
+    def similarity(self, other):
+        user_ratings = {}
+        paired_ratings = []
+        for rating in self.ratings:
+            user_ratings[rating.movie_id] = rating
+
+        for rating in other.ratings:
+            user_rating = user_ratings.get(rating.movie_id)
+            if user_rating:
+                paired_ratings.append( (user_rating.rating, rating.rating) )
+
+        if paired_ratings:
+            return correlation.pearson(paired_ratings)
+        else:
+            return 0.0
 
 class Movie(Base):
     __tablename__ = "movies"
