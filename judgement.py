@@ -1,10 +1,17 @@
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, g
 import model
 
 app = Flask(__name__)
 app.secret_key = "ABC"
 
 
+@app.before_request
+def check_login():
+    user_id = session.get('user_id')
+    if user_id:
+        g.user = model.session.query(model.User).get(user_id)
+    else:
+        g.user = None
 
 @app.route("/")
 def index():
@@ -48,6 +55,7 @@ def user_signup():
         session["user_id"] = str(u.id)
         print session
         flash("Successfully signed up!")
+
 
     return redirect("/")
 

@@ -7,7 +7,7 @@
 
     {% if session.get("user_email", False) %}
         <div>
-            User: {{ session["user_email"] }} 
+            User: {{ g.user.email }}
         </div>
         <a href="/logout">Logout</a>
     {% else %}
