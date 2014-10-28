@@ -89,9 +89,7 @@ def get_user_list():
 def display_user_info():
     user = request.args.get("user")
     user_ratings = model.session.query(model.Rating).filter_by(user_id = user).all()
-    # for rating in user_ratings:
-    #     movie = rating.movie
-    #     print movie.name, rating.rating
+
     return render_template("user_info.html", user_ratings = user_ratings, user = user)
 
 @app.route("/get_movie_list")
@@ -105,6 +103,9 @@ def update_movie_rating():
     # user_id in session
     movie_id = request.args.get("movie")
     rating = request.form.get("rating")
+    if not rating.isdigit():
+        flash("Please a number 1-5")
+        return redirect("/get_movie_list")
     user_id = session["user_id"]
     # print movie_id
     # print rating
@@ -120,7 +121,9 @@ def update_movie_rating():
         r.rating = rating
         model.session.add(r)
         flash("Your rating has been added.")
+
     model.session.commit()
+
     url = "/display_user_info?user=%s" % user_id
     return redirect(url)
 
