@@ -44,11 +44,13 @@ class User(Base):
         similarities = [ (self.similarity(r.user), r) for r in other_ratings ]
 
         similarities.sort(reverse = True)
-        
-        top_match = similarities[0]
-        similarity_num, rating_object = top_match
+        similarities = [ sim for sim in similarities if sim[0] > 0 ]
+        if not similarities:
+            return None
+        numerator = sum([ r.rating * similarity for similarity, r in similarities ])
+        denominator = sum([ similarity[0] for similarity in similarities ])
 
-        return rating_object.rating * similarity_num
+        return numerator / denominator
 
 
 class Movie(Base):
