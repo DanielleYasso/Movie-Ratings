@@ -123,13 +123,35 @@ def view_movie(id):
     prediction = None
     if not user_rating:
         prediction = g.user.predict_rating(movie)
+        effective_rating = prediction
+    else:
+        effective_rating = user_rating
     # End prediction
+
+    # THE EYE
+    the_eye = model.session.query(model.User).filter_by(email="theeye@ofjudgement.com").one()
+    eye_rating = model.session.query(model.Rating).filter_by(user_id=the_eye.id, movie_id=movie.id).first()
+
+    if not eye_rating:
+        eye_rating = the_eye.predict_rating(movie)
+    else:
+        eye_rating = eye_rating.rating
+
+    difference = abs(eye_rating - effective_rating)
+
+    messages = [ "Brother from another mother? Sister from another mister? I LOVE YOU!",
+                 "You're almost perfect. Not really. You suck.",
+                 "Fuckkkk youuuuuuu.",
+                 "You're dead to me.",
+                 "Really??? Why don't you just take your movie ticket and use it to slit your own throat." ]
+
+    beratement = messages[int(difference)]
 
     # so we can pass to movie_list, which requires a list
     movies = [movie]
 
     return render_template("movie_list.html", movies=movies, average=avg_rating, user_rating=user_rating, 
-        prediction=prediction)
+        prediction=prediction, beratement=beratement)
 
 @app.route("/update_movie_rating", methods=["POST"])
 def update_movie_rating():
