@@ -19,11 +19,6 @@
     <a href="/get_movie_list">View All Movies</a>
 
 
-
-
-    {% block body %}
-    {% endblock %}
-
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -31,6 +26,10 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
+
+
+    {% block body %}
+    {% endblock %}
 
 </body>
 </html>

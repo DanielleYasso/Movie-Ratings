@@ -176,6 +176,9 @@ def update_movie_rating():
     if not rating.isdigit():
         flash("Please type a number 1-5")
         return redirect("/get_movie_list")
+    elif not 1 <= int(rating) <= 5:
+        flash("Please type a number between 1 and 5")
+        return redirect("/get_movie_list")
     user_id = session["user_id"]
     # print movie_id
     # print rating
