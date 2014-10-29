@@ -84,12 +84,12 @@ def user_logout():
 
 @app.route("/get_user_list")
 def get_user_list():
-    user_list = model.session.query(model.User).limit(10).all()
-    extra_user = model.session.query(model.User).filter_by(id=944).first()
-
-    user_list.append(extra_user)
-    extra_user = model.session.query(model.User).filter_by(id=945).first()
-    user_list.append(extra_user)
+    # user_list = model.session.query(model.User).limit(10).all()
+    user_list = model.session.query(model.User).filter(model.User.id>=935).all()
+    # for extra_user in extra_users:
+        # user_list.append(extra_user)
+    # extra_user = model.session.query(model.User).filter_by(id=945).first()
+    # user_list.append(extra_user)
 
     return render_template("user_list.html", users=user_list)
 
