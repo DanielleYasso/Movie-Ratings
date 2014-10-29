@@ -57,7 +57,7 @@ class User(Base):
 
 
         self_rating = self_rating_of_other_movie * sim
-        self_rating = round(self_rating)
+        self_rating = round(self_rating, 1)
 
         # error check for less than one instances
         if self_rating < 1:

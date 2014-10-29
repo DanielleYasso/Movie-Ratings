@@ -106,6 +106,31 @@ def get_movie_list():
    
     return render_template("movie_list.html", movies=movie_list)
 
+@app.route("/movie/<int:id>")
+def view_movie(id):
+    movie = model.session.query(model.Movie).get(id)
+    ratings = movie.ratings
+    rating_nums = []
+    user_rating = None
+    for r in ratings:
+        if r.user_id == g.user.id:
+            user_rating = r.rating
+        rating_nums.append(r.rating)
+    avg_rating = round(float(sum(rating_nums))/len(rating_nums), 1)
+
+    # Prediction code: only predict if the user hasn't rated it
+    # user = model.session.query(User).get(session["user_id"])
+    prediction = None
+    if not user_rating:
+        prediction = g.user.predict_rating(movie)
+    # End prediction
+
+    # so we can pass to movie_list, which requires a list
+    movies = [movie]
+
+    return render_template("movie_list.html", movies=movies, average=avg_rating, user_rating=user_rating, 
+        prediction=prediction)
+
 @app.route("/update_movie_rating", methods=["POST"])
 def update_movie_rating():
     # user_id in session
