@@ -34,6 +34,21 @@ def user_signup():
     age = request.form.get("age")
     zipcode = request.form.get("zipcode")
 
+
+    # ERROR CHECKING
+    if not email:
+        flash("Please enter a valid email address")
+        return redirect("/signup_form")
+    if not password:
+        flash("Please enter a password")
+        return redirect("/signup_form")
+    if not age.isdigit():
+        flash("Please type a numeric age")
+        return redirect("/signup_form")
+    if len(zipcode) != 5 or not zipcode.isdigit():
+        flash ("Please type a valid 5 digit zipcode")
+        return redirect("/signup_form")
+
     # check for email
     u = model.session.query(model.User).filter(model.User.email==email).first()
 
@@ -159,7 +174,7 @@ def update_movie_rating():
     movie_id = request.args.get("movie")
     rating = request.form.get("rating")
     if not rating.isdigit():
-        flash("Please a number 1-5")
+        flash("Please type a number 1-5")
         return redirect("/get_movie_list")
     user_id = session["user_id"]
     # print movie_id
