@@ -39,18 +39,31 @@ class User(Base):
             return 0.0
 
     def predict_rating(self, movie):
-        other_ratings = movie.ratings
 
-        similarities = [ (self.similarity(r.user), r) for r in other_ratings ]
+        other_movies = session.query(Movie).join(Movie.ratings).filter_by(user_id=self.id).all()
 
+        similarities = [ (Movie.similarity(movie, m), m) for m in other_movies ]
         similarities.sort(reverse = True)
         similarities = [ sim for sim in similarities if sim[0] > 0 ]
         if not similarities:
             return None
-        numerator = sum([ r.rating * similarity for similarity, r in similarities ])
-        denominator = sum([ similarity[0] for similarity in similarities ])
 
-        return numerator / denominator
+        # starting from the beginning of the list, stop when you find a movie the user has rated
+        sim, top_movie = similarities[0]
+        for rating in top_movie.ratings:
+            if self.id == rating.user_id:
+                self_rating_of_other_movie = rating.rating
+                break
+
+
+        self_rating = self_rating_of_other_movie * sim
+        self_rating = round(self_rating)
+
+        # error check for less than one instances
+        if self_rating < 1:
+            self_rating = 1
+
+        return self_rating
 
 
 class Movie(Base):
@@ -60,6 +73,34 @@ class Movie(Base):
     name = Column(String(120), nullable = False)
     released_at = Column(DateTime, nullable = True)
     imdb_url = Column(String(120), nullable = True)
+
+    def similarity(self, other_movie):
+
+        movie_ratings = {}
+        paired_ratings = []
+
+        # loop through all the ratings for self (the movie in question)
+        for rating in self.ratings:
+            # get all the user_ids and their ratings for that movie (self)
+            # dictionary key = user_id, value = rating, for self
+            movie_ratings[rating.user_id] = rating.rating 
+
+        # loop through all the ratings for the other movie (being compared to self)
+        for rating in other_movie.ratings:
+
+            # for each rating, if a user has rated this AND rated self (check dictionary),
+            # store that rating in movie_rating
+            movie_rating = movie_ratings.get(rating.user_id, False)
+
+            # if movie_rating exists (there was a match - this user rated both self and other_movie)
+            if movie_rating:
+                # add the tuple of movie_rating (self rating, and other_movie's rating)
+                paired_ratings.append( (movie_rating, rating.rating) )
+
+        if paired_ratings:
+            return correlation.pearson(paired_ratings)
+        else:
+            return 0.0
 
 class Rating(Base):
     __tablename__ = "ratings"
