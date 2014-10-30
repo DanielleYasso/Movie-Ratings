@@ -77,3 +77,10 @@ label.leftLabel {
     width: 75px;
     display: inline-block;
 }
+
+.loginButton {
+    float: right;
+    margin-top: 5px;
+    font-size: 12pt;
+
+}
