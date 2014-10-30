@@ -22,7 +22,7 @@
             <input name="rating" type="text" maxlength="1" size="4"><input type="submit" value="Update Rating">     
         </form>
         {% else %}
-            <h4>{{ movie.name }} has {{ movie.ratings|length }} ratings</h4>
+            <h4><a href="/movie/{{movie.id}}">{{ movie.name }}</a> has {{ movie.ratings|length }} ratings</h4>
             {% if average %}
                 <p>Average rating: {{ average }}</p>
             {% endif %}

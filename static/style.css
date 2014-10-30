@@ -60,3 +60,20 @@ a:link, a:visited {
 a:hover {
     color: #088A08;
 }
+
+h1 {
+    text-align: center;
+    font-family: 'Oswald', sans-serif!important;
+    font-size: 2.5em!important;
+    margin-top: 10px;
+}
+
+#loginBox {
+    width: 255px;
+    margin: auto;
+}
+
+label.leftLabel {
+    width: 75px;
+    display: inline-block;
+}

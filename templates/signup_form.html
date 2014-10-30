@@ -1,26 +1,28 @@
 {% extends "index.html" %}
 {% block body %}
+<div id="loginBox">
     <form action="/signup" method="POST">
         <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email">
+            <label class="leftLabel" for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="email">
         </div>
         <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <label class="leftLabel" for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="password">
         </div>
         <div>
-            <label for="age">Age</label>
-            <input type="text" id="age" name="age">
+            <label class="leftLabel" for="age">Age</label>
+            <input type="text" id="age" name="age" placeholder="age">
         </div>
         <div>
-            <label for="zipcode">Zipcode</label>
-            <input type="text" id="zipcode" name="zipcode">
+            <label class="leftLabel" for="zipcode">Zipcode</label>
+            <input type="text" id="zipcode" name="zipcode" placeholder="zipcode">
         </div>
         <div>
-            <input type="submit" value="Signup">
+            <input class="leftLabel" type="submit" value="Signup">
         </div>
     </form>
+</div>
 
 {% endblock %}
 
