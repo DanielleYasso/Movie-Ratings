@@ -3,7 +3,7 @@
 
 
 <h3>Ratings for User #{{ user }}</h3>
-<ul>
+<ul class="userMovies">
     {% for rating in user_ratings %}
         {% if session["user_id"]==user %}
         <form action="/update_movie_rating?movie={{ rating.movie.id }}" method="POST">

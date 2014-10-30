@@ -24,19 +24,22 @@
         </ul>
     </div>
 
-    <h2>MOVIE RATINGS!</h2>
+    <div id="container">
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
+    <h1>MOVIE RATINGS!</h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
 
 
-    {% block body %}
-    {% endblock %}
+        {% block body %}
+        {% endblock %}
+    </div>
 
 </body>
 </html>
