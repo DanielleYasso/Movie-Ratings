@@ -82,5 +82,8 @@ label.leftLabel {
     float: right;
     margin-top: 5px;
     font-size: 12pt;
+}
 
+.flashedMessage {
+    text-align: center;
 }
