@@ -127,40 +127,43 @@ def view_movie(id):
     ratings = movie.ratings
     rating_nums = []
     user_rating = None
+    prediction = None
+    beratement = None
     for r in ratings:
-        if r.user_id == g.user.id:
+        if g.user and r.user_id == g.user.id:
             user_rating = r.rating
         rating_nums.append(r.rating)
     avg_rating = round(float(sum(rating_nums))/len(rating_nums), 1)
 
-    # Prediction code: only predict if the user hasn't rated it
-    # user = model.session.query(User).get(session["user_id"])
-    prediction = None
-    if not user_rating:
-        prediction = g.user.predict_rating(movie)
-        effective_rating = prediction
-    else:
-        effective_rating = user_rating
-    # End prediction
+    if g.user:
+        # Prediction code: only predict if the user hasn't rated it
+        # user = model.session.query(User).get(session["user_id"])
+        prediction = None
+        if not user_rating:
+            prediction = g.user.predict_rating(movie)
+            effective_rating = prediction
+        else:
+            effective_rating = user_rating
+        # End prediction
 
-    # THE EYE
-    the_eye = model.session.query(model.User).filter_by(email="theeye@ofjudgement.com").one()
-    eye_rating = model.session.query(model.Rating).filter_by(user_id=the_eye.id, movie_id=movie.id).first()
+        # THE EYE
+        the_eye = model.session.query(model.User).filter_by(email="theeye@ofjudgement.com").one()
+        eye_rating = model.session.query(model.Rating).filter_by(user_id=the_eye.id, movie_id=movie.id).first()
 
-    if not eye_rating:
-        eye_rating = the_eye.predict_rating(movie)
-    else:
-        eye_rating = eye_rating.rating
+        if not eye_rating:
+            eye_rating = the_eye.predict_rating(movie)
+        else:
+            eye_rating = eye_rating.rating
 
-    difference = abs(eye_rating - effective_rating)
+        difference = abs(eye_rating - effective_rating)
 
-    messages = [ "Brother from another mother? Sister from another mister? I LOVE YOU!",
-                 "You're almost perfect. Not really. You suck.",
-                 "Fuckkkk youuuuuuu.",
-                 "You're dead to me.",
-                 "Really??? Why don't you just take your movie ticket and use it to slit your own throat." ]
+        messages = [ "Brother from another mother? Sister from another mister? I LOVE YOU!",
+                     "You're almost perfect. Not really. You suck.",
+                     "Fuckkkk youuuuuuu.",
+                     "You're dead to me.",
+                     "Really??? Why don't you just take your movie ticket and use it to slit your own throat." ]
 
-    beratement = messages[int(difference)]
+        beratement = messages[int(difference)]
 
     # so we can pass to movie_list, which requires a list
     movies = [movie]
