@@ -1,0 +1,40 @@
+body {
+    background-color: #BDBDBD;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+#navBar {
+    text-align: right;
+    background-color: #2E2E2E;
+    color: white;
+    width: 100%;
+}
+
+#navBar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#navBar li {
+    display: inline-block;
+    padding: 0;
+}
+
+#navBar a {
+    display: block;
+    line-height: 40px;
+    min-height: 40px;
+    padding: 0 10px;
+}
+
+#navBar a:link, #navBar a:visited {
+    color: #BDBDBD;
+    text-decoration: none;
+}
+
+#navBar a:hover {
+    color: #E6E6E6;
+    background: #1C1C1C;
+}

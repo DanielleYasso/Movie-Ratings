@@ -1,24 +1,30 @@
 <html>
 <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+
+    <div id="navBar">
+        <ul>
+            {% if session.get("user_email", False) %}
+                <li>
+                    {{ g.user.email }}
+                </li>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/display_user_info?user={{ g.user.id }}">Your Rated Movies</a></li>
+            {% else %}
+                <li><a href="/login_form">Login</a></li>
+                <li><a href="/signup_form">Signup</a></li>
+            {% endif %}
+
+            <li><a href="/get_user_list">All Users</a></li>
+            <li><a href="/get_movie_list">All Movies</a></li>
+        </ul>
+    </div>
+
     <h2>MOVIE RATINGS!</h2>
-
-    {% if session.get("user_email", False) %}
-        <div>
-            User: {{ g.user.email }}
-        </div>
-        <a href="/logout">Logout</a>
-        <a href="/display_user_info?user={{ g.user.id }}">View Your Rated Movies</a>
-    {% else %}
-        <a href="/login_form">Login</a>
-        <a href="/signup_form">Signup</a>
-    {% endif %}
-
-    <a href="/get_user_list">View All Users</a>
-    <a href="/get_movie_list">View All Movies</a>
-
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
