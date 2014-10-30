@@ -10,6 +10,7 @@
             User: {{ g.user.email }}
         </div>
         <a href="/logout">Logout</a>
+        <a href="/display_user_info?user={{ g.user.id }}">View Your Rated Movies</a>
     {% else %}
         <a href="/login_form">Login</a>
         <a href="/signup_form">Signup</a>

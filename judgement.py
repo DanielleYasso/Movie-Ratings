@@ -173,12 +173,14 @@ def update_movie_rating():
     # user_id in session
     movie_id = request.args.get("movie")
     rating = request.form.get("rating")
+    url = "/movie/%s" % movie_id
+
     if not rating.isdigit():
         flash("Please type a number 1-5")
-        return redirect("/get_movie_list")
+        return redirect(url)
     elif not 1 <= int(rating) <= 5:
         flash("Please type a number between 1 and 5")
-        return redirect("/get_movie_list")
+        return redirect(url)
     user_id = session["user_id"]
     # print movie_id
     # print rating
@@ -197,7 +199,6 @@ def update_movie_rating():
 
     model.session.commit()
 
-    url = "/display_user_info?user=%s" % user_id
     return redirect(url)
 
 
